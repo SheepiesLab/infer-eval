@@ -66,7 +66,7 @@ def eval(env, debug):
   nums = np.array([30, 60, 90, 120, 150, 180])
   nums = nums * 5
   for i in range(len(nums)):
-    for _ in range(5):
+    for _ in range(3):
       num = nums[i]
       logging.info('request num: {}'.format(num))
       lam = (60 * 1000.0) / num
