@@ -6,6 +6,12 @@ import numpy as np
 from concurrent.futures import ThreadPoolExecutor
 import time
 
+import logging
+logging.basicConfig(
+    level   =   logging.INFO,
+    format  =   '%(asctime)s %(levelname)s %(message)s',
+)
+
 from aws_requests_auth.boto_utils import BotoAWSRequestsAuth
 
 with open("cat.jpg", "rb") as f:
@@ -43,9 +49,9 @@ def eval(env, debug):
     response = requests.post(**meta)
     if not warmup:
       if response.status_code == 200:
-        print('succ. latency: {}; ete: {}'.format(response.json()['latency'], response.elapsed.total_seconds() * 1000))
+        logging.info('succ. latency: {}; ete: {}'.format(response.json()['latency'], response.elapsed.total_seconds() * 1000))
       else:
-        print('fail. code: {}'.format(response.status_code))
+        logging.info('fail. code: {}'.format(response.status_code))
 
 
   for _ in range(2):
@@ -61,7 +67,7 @@ def eval(env, debug):
   nums = nums * 5
   for i in range(len(nums)):
     num = nums[i]
-    print('request num: {}'.format(num))
+    logging.info('request num: {}'.format(num))
     lam = (60 * 1000.0) / num
     samples = np.random.poisson(lam, num)
     for s in samples:
