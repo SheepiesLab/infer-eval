@@ -63,7 +63,7 @@ def eval(env, debug):
 
   pool = ThreadPoolExecutor(max_workers=3000)
 
-  nums = np.arange(20, 210, 10)
+  nums = np.arange(30, 210, 10)
   nums = nums * 5
   for i in range(len(nums)):
     num = nums[i]
