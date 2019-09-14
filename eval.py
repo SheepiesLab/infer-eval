@@ -63,17 +63,16 @@ def eval(env, debug):
 
   pool = ThreadPoolExecutor(max_workers=3000)
 
-  nums = np.array([30, 60, 90, 120, 150, 180])
+  nums = np.arange(20, 210, 10)
   nums = nums * 5
   for i in range(len(nums)):
-    for _ in range(3):
-      num = nums[i]
-      logging.info('request num: {}'.format(num))
-      lam = (60 * 1000.0) / num
-      samples = np.random.poisson(lam, num)
-      for s in samples:
-          pool.submit(sender)
-          time.sleep(s/1000.0)
+    num = nums[i]
+    logging.info('request num: {}'.format(num))
+    lam = (60 * 1000.0) / num
+    samples = np.random.poisson(lam, num)
+    for s in samples:
+        pool.submit(sender)
+        time.sleep(s/1000.0)
 
 if __name__ == '__main__':
   eval()
