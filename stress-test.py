@@ -30,8 +30,8 @@ urls = {
 
 @click.command()
 @click.argument('env', type=click.Choice([ 'sm', 'la' ]))
-@click.option('--debug', type=bool, default=False)
-def eval(env, debug):
+@click.option('--num', type=int, default=1000)
+def eval(env, num):
   meta = {
     'url': urls[env],
     'json': payload
@@ -54,26 +54,14 @@ def eval(env, debug):
         logging.info('fail. code: {}; ex: {}'.format(response.status_code, response.text))
 
 
-  for _ in range(2):
-    sender(warmup=(not debug))
-    time.sleep(10)
-  
-  if debug:
-    return
-
   pool = ThreadPoolExecutor(max_workers=3000)
 
-  nums = np.array([30, 60, 90, 120, 150, 180])
-  nums = nums * 5
-  for i in range(len(nums)):
-    for _ in range(3):
-      num = nums[i]
-      logging.info('request num: {}'.format(num))
-      lam = (60 * 1000.0) / num
-      samples = np.random.poisson(lam, num)
-      for s in samples:
-          pool.submit(sender)
-          time.sleep(s/1000.0)
+  logging.info('request num: {}'.format(num))
+  lam = (60 * 1000.0) / num
+  samples = np.random.poisson(lam, num)
+  for s in samples:
+    pool.submit(sender)
+    time.sleep(s/1000.0)
 
 if __name__ == '__main__':
   eval()
