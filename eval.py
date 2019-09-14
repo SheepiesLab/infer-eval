@@ -16,7 +16,7 @@ with open("cat.jpg", "rb") as f:
 
 urls = {
   'sm': 'https://runtime.sagemaker.us-east-1.amazonaws.com/endpoints/sm-keras-end/invocations',
-  'la': 'https://4sw934su03.execute-api.us-east-1.amazonaws.com/default/test-lambda'
+  'la': 'https://797y0ky6nf.execute-api.us-east-1.amazonaws.com/default/eval-nasnet'
 }
 
 # AWS lambda layers: arn:aws:lambda:us-east-1:347034527139:layer:tf_keras_pillow:5
