@@ -66,13 +66,14 @@ def eval(env, debug):
   nums = np.array([30, 60, 90, 120, 150, 180])
   nums = nums * 5
   for i in range(len(nums)):
-    num = nums[i]
-    logging.info('request num: {}'.format(num))
-    lam = (60 * 1000.0) / num
-    samples = np.random.poisson(lam, num)
-    for s in samples:
-        pool.submit(sender)
-        time.sleep(s/1000.0)
+    for _ in range(5):
+      num = nums[i]
+      logging.info('request num: {}'.format(num))
+      lam = (60 * 1000.0) / num
+      samples = np.random.poisson(lam, num)
+      for s in samples:
+          pool.submit(sender)
+          time.sleep(s/1000.0)
 
 if __name__ == '__main__':
   eval()
