@@ -16,12 +16,16 @@ with open("cat.jpg", "rb") as f:
 
 urls = {
   'sm': 'https://runtime.sagemaker.us-east-1.amazonaws.com/endpoints/sm-keras-end/invocations',
-  'la': 'https://a5jmq9mpwb.execute-api.us-east-1.amazonaws.com/default/test-upload'
+  'la': 'https://4sw934su03.execute-api.us-east-1.amazonaws.com/default/test-lambda'
 }
+
+# AWS lambda layers: arn:aws:lambda:us-east-1:347034527139:layer:tf_keras_pillow:5
+# refer to: https://github.com/antonpaquin/Tensorflow-Lambda-Layer/blob/master/arn_tables/tensorflow_keras_pillow.md
 
 @click.command()
 @click.argument('env', type=click.Choice([ 'sm', 'la' ]))
-def eval(env):
+@click.option('--debug', type=bool, default=False)
+def eval(env, debug):
   meta = {
     'url': urls[env],
     'json': payload
@@ -43,10 +47,18 @@ def eval(env):
       else:
         print('fail. code: {}'.format(response.status_code))
 
-  sender(warmup=True)
+
+  for _ in range(2):
+    sender(warmup=(not debug))
+    time.sleep(10)
+  
+  if debug:
+    return
 
   pool = ThreadPoolExecutor(max_workers=3000)
-  nums = [30, 60, 90, 120, 150, 180] # first min to warm up
+
+  nums = np.array([30, 60, 90, 120, 150, 180])
+  nums = nums * 5
   for i in range(len(nums)):
     num = nums[i]
     print('request num: {}'.format(num))
