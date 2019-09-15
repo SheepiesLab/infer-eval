@@ -51,20 +51,19 @@ def eval(env, debug):
       if response.status_code == 200:
         logging.info('succ. latency: {}; ete: {}'.format(response.json()['latency'], response.elapsed.total_seconds() * 1000))
       else:
-        logging.info('fail. code: {}; ex: {}'.format(response.status_code, response.text))
+        logging.info('fail. code: {}'.format(response.status_code))
 
 
-  for _ in range(2):
-    sender(warmup=(not debug))
-    time.sleep(10)
-  
   if debug:
+    for _ in range(2):
+      sender()
+      time.sleep(10)
     return
 
-  pool = ThreadPoolExecutor(max_workers=3000)
+  pool = ThreadPoolExecutor(max_workers=5000)
 
-  nums = np.arange(30, 210, 10)
-  nums = nums * 5
+  nums = np.arange(100, 1001, 100)
+  nums = np.append(nums, np.arange(1000, 99, -100))
   for i in range(len(nums)):
     num = nums[i]
     logging.info('request num: {}'.format(num))
