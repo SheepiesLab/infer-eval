@@ -60,7 +60,7 @@ def eval(env, debug):
       time.sleep(10)
     return
 
-  pool = ThreadPoolExecutor(max_workers=5000)
+  pool = ThreadPoolExecutor(max_workers=10000)
 
   nums = np.arange(100, 1001, 100)
   nums = np.append(nums, np.arange(1000, 99, -100))
