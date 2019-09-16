@@ -30,8 +30,7 @@ urls = {
 
 @click.command()
 @click.argument('env', type=click.Choice([ 'sm', 'la' ]))
-@click.option('--debug', type=bool, default=False)
-def eval(env, debug):
+def eval(env):
   meta = {
     'url': urls[env],
     'json': payload
@@ -45,20 +44,12 @@ def eval(env, debug):
 
     meta['auth']=auth
 
-  def sender(warmup=False):
+  def sender():
     response = requests.post(**meta)
-    if not warmup:
-      if response.status_code == 200:
-        logging.info('succ. latency: {}; ete: {}'.format(response.json()['latency'], response.elapsed.total_seconds() * 1000))
-      else:
-        logging.info('fail. code: {}'.format(response.status_code))
-
-
-  if debug:
-    for _ in range(2):
-      sender()
-      time.sleep(10)
-    return
+    if response.status_code == 200:
+      logging.info('succ. latency: {}; ete: {}'.format(response.json()['latency'], response.elapsed.total_seconds() * 1000))
+    else:
+      logging.info('fail. code: {}'.format(response.status_code))
 
   pool = ThreadPoolExecutor(max_workers=10000)
 
