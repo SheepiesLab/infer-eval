@@ -2,9 +2,11 @@ import requests
 import base64
 import json
 import click
+import csv
 import numpy as np
 from concurrent.futures import ThreadPoolExecutor
 import time
+from os.path import abspath, dirname, join
 
 import logging
 logging.basicConfig(
@@ -53,8 +55,14 @@ def eval(env):
 
   pool = ThreadPoolExecutor(max_workers=10000)
 
-  nums = np.arange(100, 1001, 100)
-  nums = np.append(nums, np.arange(1000, 99, -100))
+  # nums = np.arange(100, 1001, 100)
+  # nums = np.append(nums, np.arange(1000, 99, -100))
+  nums = []
+  with open('{}/workload/test_2h.csv'.format(folder), 'r') as f:
+    reader = csv.DictReader(f)
+    nums = [ int(row['tweets']) for row in reader ]
+    print(len(nums))
+
   for i in range(len(nums)):
     num = nums[i]
     logging.info('request num: {}'.format(num))
@@ -64,5 +72,8 @@ def eval(env):
         pool.submit(sender)
         time.sleep(s/1000.0)
 
+folder = abspath(dirname(__file__))
+
 if __name__ == '__main__':
   eval()
+
