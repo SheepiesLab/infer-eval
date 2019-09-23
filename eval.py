@@ -4,7 +4,7 @@ import json
 import click
 import csv
 import numpy as np
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 import time
 from os.path import abspath, dirname, join
 
@@ -53,7 +53,7 @@ def eval(env):
     else:
       logging.info('fail. code: {}'.format(response.status_code))
 
-  pool = ThreadPoolExecutor(max_workers=10000)
+  pool = ProcessPoolExecutor(max_workers=10000)
 
   # nums = np.arange(100, 1001, 100)
   # nums = np.append(nums, np.arange(1000, 99, -100))
@@ -61,7 +61,7 @@ def eval(env):
   with open('{}/workload/test_2h.csv'.format(folder), 'r') as f:
     reader = csv.DictReader(f)
     nums = [ int(row['tweets']) for row in reader ]
-    print(len(nums))
+    print(sum(nums))
 
   for i in range(len(nums)):
     num = nums[i]
@@ -74,6 +74,10 @@ def eval(env):
 
 folder = abspath(dirname(__file__))
 
+def test():
+  print('in')
+  time.sleep(5)
+  print('out')
+
 if __name__ == '__main__':
   eval()
-
