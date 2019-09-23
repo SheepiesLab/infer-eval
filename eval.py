@@ -73,11 +73,5 @@ def eval(env):
         time.sleep(s/1000.0)
 
 folder = abspath(dirname(__file__))
-
-def test():
-  print('in')
-  time.sleep(5)
-  print('out')
-
 if __name__ == '__main__':
   eval()
