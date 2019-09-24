@@ -48,7 +48,6 @@ def get_meta(env):
 def sender(meta):
   response = requests.get(meta['url'])
   if response.status_code == 200:
-    # logging.info('succ. latency: {}; ete: {}'.format(response.json()['latency'], response.elapsed.total_seconds() * 1000))
-    logging.info(response.text)
+    logging.info('succ. latency: {}; ete: {}'.format(response.json()['latency'], response.elapsed.total_seconds() * 1000))
   else:
     logging.info('fail. code: {}'.format(response.status_code))
